@@ -40,7 +40,7 @@ public class CsjParser {
 	        	domRead(files[i].toString());
 	        }
 	    }
-	    saveText(saveCorpus,dirName + "/corpus.txt");
+	    saveText(saveCorpus,dirName + "/corpus2.txt");
 	    saveText(saveSentence,dirName + "/sentence.txt");
 	}
 	
