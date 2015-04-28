@@ -40,7 +40,8 @@ public class CsjParser {
 	        	domRead(files[i].toString());
 	        }
 	    }
-	    saveText(saveCorpus,dirName + "/corpus2.txt");
+	    //保存する場所
+	    saveText(saveCorpus,dirName + "/corpus.txt");
 	    saveText(saveSentence,dirName + "/sentence.txt");
 	}
 	
