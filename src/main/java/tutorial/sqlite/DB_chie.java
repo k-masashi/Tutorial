@@ -22,13 +22,14 @@ public class DB_chie {
 	public DB_chie(){
 		try{
 			try {
-				con = new DBManager("droidchan_sparse_427.sqlite3").createConnection();
+				con = new DBManager("/Volumes/TOSHIBA EXT/result/chie_sparse_622_1000.sqlite3").createConnection();
+				//con = new DBManager("/Users/masashi/Documents/news_test.sqlite3").createConnection();
+				
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			}
 			smt = con.createStatement();
-			
-			
+						
 			smt.executeUpdate("DROP TABLE IF EXISTS QUESTION");
 			smt.executeUpdate("CREATE TABLE QUESTION(ID ID, QUESTION TEXT, ANSWER TEXT);");
 			
@@ -164,10 +165,10 @@ public class DB_chie {
 			con.commit();			
 			rs = smt.executeQuery("SELECT * FROM WORD;");
 			while (rs.next()) {
-				System.out.println("ID = " + rs.getInt("ID"));
-				System.out.println("TOPIC = " + rs.getInt("TOPIC"));
-				System.out.println("WORD = " + rs.getString("WORD"));
-				System.out.println("P = " + rs.getDouble("P"));
+				//System.out.println("ID = " + rs.getInt("ID"));
+				//System.out.println("TOPIC = " + rs.getInt("TOPIC"));
+				//System.out.println("WORD = " + rs.getString("WORD"));
+				//System.out.println("P = " + rs.getDouble("P"));
 			}
 			con.close();
 			smt.close();

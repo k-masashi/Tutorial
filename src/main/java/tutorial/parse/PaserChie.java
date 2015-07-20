@@ -42,8 +42,7 @@ public class PaserChie {
 		for (Token token : tokens) {
 		    if(token.getAllFeatures().split(",")[0].equals("名詞")){
 		    	words += token.getSurfaceForm() + " "; 
-		    }
-		    
+		    }		    
 		    System.out.println("==================================================");
 		    System.out.println("allFeatures : " + token.getAllFeatures());
 		    System.out.println("partOfSpeech : " + token.getPartOfSpeech());
@@ -58,7 +57,6 @@ public class PaserChie {
 		}
 		
 		//words = words.substring(0, words.length() - 2);
-		
 		saveText(words + "\n", "/Users/masashi/java/questions_rep.txt");
 		//saveText(questionWord + "\n", "/Users/masashi/java/questiones_out.txt");
 

@@ -9,7 +9,7 @@ public class DroidParserTest {
 	@Test
 	public void test() {
 		DroidParser paser = new DroidParser();
-		paser.makeDocuments("/Users/masashi/java/Data/question_topic93.csv");
+		paser.makeDocuments("/Volumes/TOSHIBA EXT/corpus/622.csv");
 	}
 
 }

@@ -6,6 +6,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+import org.atilika.kuromoji.Token;
+import org.atilika.kuromoji.Tokenizer;
+
+import tutorial.util.Wordnet;
+import edu.cmu.lti.jawjaw.pobj.POS;
 public class PaserUtil {
 	//ファイル読み込み用メソッド
 	public String fileRead(String filePath) {
@@ -46,5 +54,25 @@ public class PaserUtil {
 		} catch (IOException e) {
 			System.out.println(e);
 		}
+	}
+	
+	public static String[] wakati(String str){
+		Tokenizer tokenizer = Tokenizer.builder().build();
+		List<Token> tokens = tokenizer.tokenize(str);
+		String words = "";
+		for (Token token : tokens) {
+			String hinshi = token.getAllFeatures().split(",")[0];
+			if(!hinshi.equals("助詞") && !hinshi.equals("助動詞") && !hinshi.equals("記号")){
+				//System.out.println(hinshi + ":" + token.getSurfaceForm());
+				try{
+					words += token.getSurfaceForm() + " " + Wordnet.AdvancedDemo.getHypernyms( token.getSurfaceForm(), POS.n );					
+				}catch(Exception e){
+					
+				}
+
+				//System.out.println(words);
+			}
+		}
+		return words.split(" ");
 	}
 }

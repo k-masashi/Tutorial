@@ -1,6 +1,7 @@
 package tutorial.topic;
  
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import tutorial.discrete.Dirichlet;
@@ -192,26 +193,29 @@ public class SparseLDA {
 	public static void main(String[] args) throws Exception {
 		DB_chie db = new DB_chie();
 		//DocumentSet corpus = new DocumentSet(
-				//"/Dropbox/corpus/mai95/mai95_word1m.txt");
+		//"/Dropbox/corpus/mai95/mai95_word1m.txt");
 		//DocumentSet corpus = new DocumentSet("/Users/masashi/java/textShogi_out.txt");
 		//DocumentSet corpus = new DocumentSet("src/test/resources/news.txt");
-		DocumentSet corpus = new DocumentSet("/Users/masashi/java/droid_result_4_20.txt");
+		
+		DocumentSet corpus = new DocumentSet("/Volumes/TOSHIBA EXT/corpus/droid_result_6_22.txt");
 		SymbolSet voc = corpus.getVocabulary();
 		int V = voc.size();
-		int M = 30;
-		int numIteration = 100;
+		int M = 1000;
+		int numIteration = 1000;
 		double[] alpha = IntStream.range(0, M).mapToDouble(i -> 0.01).toArray();
 		Dirichlet wordPrior = new SymmetricDirichlet(V, 0.01);
 		Dirichlet topicPrior = new Dirichlet(alpha);
 		SparseLDA lda = new SparseLDA(topicPrior, wordPrior);
 		lda.sample(corpus.getDocuments(), numIteration);
+						
 		for (int m = 0; m < M; m++) {
 			System.out.println(m + "\talpha\t" + topicPrior.alpha(m));
+			
 			for (int v = 0; v < V; v++) {
 				double p = lda.wordPredict(m, v);
-				if (p > 0.01) {
+				if (p > 0.0001) {
 					db.insertWORD(v, m, voc.getStr(v), p);
-					System.out.println(m + "\t" + voc.getStr(v) + "\t" + p);
+					//System.out.println(m + "\t" + voc.getStr(v) + "\t" + p);
 				}
 			}
 		}		

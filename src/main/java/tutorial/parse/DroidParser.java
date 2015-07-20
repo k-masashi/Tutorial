@@ -12,38 +12,59 @@ import java.util.List;
 import org.atilika.kuromoji.Token;
 import org.atilika.kuromoji.Tokenizer;
 
+import edu.cmu.lti.jawjaw.pobj.POS;
 import tutorial.sqlite.DB_chie;
+import tutorial.util.Wordnet;
 
 public class DroidParser {
+	private static int mMeishi,mKeiyoushi,mKeiyoudoushi,mDoushi,mFukushi,mKandoushi,mDaimeishi;
 	public void makeDocuments(String fileName){
 		System.out.println("読み込み開始");
 		String getStr = fileRead(fileName);
 		System.out.println("読み込み終了");
-		/*
-		getStr = getStr.replace("\n","<-->");
-		System.out.println(String.valueOf(getStr.indexOf("<-->")));
-		System.out.println("----");		
-		String[] array = getStr.split("<-->");
-		for(int i=0; i<array.length; i++){
-		}	
-		*/
 	}
 
 	public static void wakati(String str){
-		//str = str.replace("|", "<-->");
-		
 		Tokenizer tokenizer = Tokenizer.builder().build();
-		//String checkWord = str.split("<-->")[1];
-		//String questionWord = str.split("<-->")[0];
 		List<Token> tokens = tokenizer.tokenize(str);
 		String words = "";
+		
+		int cMeishi = 0;
+		int cKeiyoushi = 0;
+		int cKeiyoudoushi = 0;
+		int cDoushi = 0;
+		int cFukushi = 0;
+		int cKandoushi = 0;
+		int cDaimeishi = 0;
+		
 		// 結果を出力してみる
 		for (Token token : tokens) {
-		    //if(token.getAllFeatures().split(",")[0].equals("名詞") || token.getAllFeatures().split(",")[0].equals("動詞") || token.getAllFeatures().split(",")[0].equals("感動詞") || token.getAllFeatures().split(",")[0].equals("形容詞") || token.getAllFeatures().split(",")[0].equals("副詞")) {
 			if(!token.getAllFeatures().split(",")[0].equals("助詞") && !token.getAllFeatures().split(",")[0].equals("助動詞")){	
-		    	words += token.getSurfaceForm() + " "; 
+		    	if(token.getAllFeatures().split(",")[0].equals("動詞") ){
+		    		words += token.getAllFeatures().split(",")[6] + " ";
+		    	}else if(token.getAllFeatures().split(",")[0].equals("形容詞") || token.getAllFeatures().split(",")[0].equals("形容動詞")){
+		    		words += token.getAllFeatures().split(",")[6] + " ";
+		    	}else{
+		    		words += token.getSurfaceForm() + " " + Wordnet.AdvancedDemo.getHypernyms( token.getSurfaceForm(), POS.n ) + " ";
+		    	}								 
 		    }
-		    
+		    String hinshi = token.getAllFeatures().split(",")[0];
+			if(hinshi.equals("名詞")){
+				cMeishi ++;
+			}else if(hinshi.equals("動詞")){
+				cDoushi ++;
+			}else if(hinshi.equals("形容詞")){
+				cKeiyoushi ++;
+			}else if(hinshi.equals("形容動詞")){
+				cKeiyoudoushi ++;				
+			}else if(hinshi.equals("副詞")){
+				cFukushi ++;
+			}else if(hinshi.equals("感動詞")){
+				cKandoushi ++;
+			}else if(hinshi.equals("代名詞")){
+				cDaimeishi ++;
+			}
+			
 		    System.out.println("==================================================");
 		    System.out.println("allFeatures : " + token.getAllFeatures());
 		    System.out.println("partOfSpeech : " + token.getPartOfSpeech());
@@ -57,26 +78,44 @@ public class DroidParser {
 		    
 		}
 		
-		//words = words.substring(0, words.length() - 2);
 		
-		saveText(words + "\n", "/Users/masashi/java/droid_result_4_20.txt");
+		//words = words.substring(0, words.length() - 2);
+		String infoHinshi = String.valueOf(cMeishi) + "," + String.valueOf(cDoushi) + "," + String.valueOf(cKeiyoushi) + "," + String.valueOf(cKeiyoudoushi) + "," + String.valueOf(cFukushi) + "," + String.valueOf(cKandoushi) + "," + String.valueOf(cDaimeishi);
+		mMeishi += cMeishi;
+		mDoushi += cDoushi;
+		mKeiyoushi += cKeiyoushi;
+		mKeiyoudoushi = cKeiyoudoushi;
+		mFukushi += cFukushi;
+		mKandoushi += cKandoushi;
+		mDaimeishi += cDaimeishi;
+		
+		saveText(words  + "\n", "/Volumes/TOSHIBA EXT/result/droid_result_7_14.txt");
+		saveText(infoHinshi + "\n", "/Volumes/TOSHIBA EXT/result/droid_result_7_14_hinshi.txt");
 		//saveText(questionWord + "\n", "/Users/masashi/java/questiones_out.txt");
 
 	}
 	//ファイル読み込み用メソッド
 	public static String fileRead(String filePath) {
+		mMeishi = 0;
+		mDoushi = 0;
+		mKeiyoushi = 0;
+		mKeiyoudoushi = 0;
+		mFukushi = 0;
+		mKandoushi = 0;
+		mDaimeishi = 0;
+		
 		FileReader fr = null;
 		String ResultRead = "";
 		String historyText = "";
 		BufferedReader br = null;
 		DB_chie db = new DB_chie();
-		
+
+		int i = 0;
 		try {
 			fr = new FileReader(filePath);
 			br = new BufferedReader(fr);
 			String line;
 			
-			int i = 0;
 			while ((line = br.readLine()) != null) {
 				ResultRead += line;
 				System.out.println(i);
@@ -109,8 +148,7 @@ public class DroidParser {
 				}catch(Exception e){					
 				}
 				i++;
-			}
-			
+			}			
 			//db.executePARE();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -126,6 +164,9 @@ public class DroidParser {
 				e.printStackTrace();
 			}
 		}
+		saveText(String.valueOf(i) + "\n", "/Volumes/TOSHIBA EXT/result/droid_result_6_22_hinshi.txt");
+		String infoHinshi = String.valueOf(mMeishi) + "," + String.valueOf(mDoushi) + "," + String.valueOf(mKeiyoushi) + "," + String.valueOf(mKeiyoudoushi) + "," + String.valueOf(mFukushi) + "," + String.valueOf(mKandoushi) + "," + String.valueOf(mDaimeishi);
+		saveText(infoHinshi + "\n", "/Volumes/TOSHIBA EXT/result/droid_result_6_22_hinshi.txt");
 		return ResultRead;
 	}
 	
