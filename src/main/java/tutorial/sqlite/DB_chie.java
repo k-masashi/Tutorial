@@ -22,7 +22,7 @@ public class DB_chie {
 	public DB_chie(){
 		try{
 			try {
-				con = new DBManager("/Volumes/TOSHIBA EXT/result/chie_sparse_622_1000.sqlite3").createConnection();
+				con = new DBManager("/home/kng/corpus/chie_sparse_622_1000.sqlite3").createConnection();
 				//con = new DBManager("/Users/masashi/Documents/news_test.sqlite3").createConnection();
 				
 			} catch (ClassNotFoundException e) {

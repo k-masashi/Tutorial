@@ -197,7 +197,7 @@ public class SparseLDA {
 		//DocumentSet corpus = new DocumentSet("/Users/masashi/java/textShogi_out.txt");
 		//DocumentSet corpus = new DocumentSet("src/test/resources/news.txt");
 		
-		DocumentSet corpus = new DocumentSet("/Volumes/TOSHIBA EXT/corpus/droid_result_6_22.txt");
+		DocumentSet corpus = new DocumentSet("/home/kng/corpus/droid_result_6_22.txt");
 		SymbolSet voc = corpus.getVocabulary();
 		int V = voc.size();
 		int M = 1000;
